@@ -66,26 +66,24 @@
 
 ## 🤖 클러드 스킬(Claude Skill)로 배포 및 설치하는 방법
 
-이 리포지토리를 **클러드 스킬(Claude Skill)**로 설정하면, AI 코딩 에이전트(Claude 등)가 슬라이드 파일을 다룰 때 이 유틸리티를 직접 실행할 수 있습니다.
+이 리포지토리를 **클러드 스킬(Claude Skill)**로 설정하면, AI 코딩 에이전트(Claude Code 등)가 슬라이드 파일을 다룰 때 이 변환기를 스킬로 인식해 자율 실행할 수 있습니다.
 
-### 방법 A: 글로벌 스킬로 등록 (모든 작업 공간에서 사용)
-1. 글로벌 설정 디렉토리에 스크립트 파일을 복사합니다:
-   ```bash
-   mkdir -p ~/.gemini/config/skills/pptx-to-markdown/scripts
-   cp src/* ~/.gemini/config/skills/pptx-to-markdown/scripts/
-   ```
-2. `~/.gemini/config/skills/pptx-to-markdown/SKILL.md` 경로에 지침서를 생성합니다:
-   ```markdown
-   ---
-   name: pptx-to-markdown
-   description: High-fidelity PPTX to Markdown conversion tool with Pro/Lite modes and auto evaluation.
-   ---
-   # PPTX to Markdown Converter
-   Run: python [skill_path]/scripts/run.py {pptx} {output} --mode [pro|lite]
-   ```
+### 방법 A: 글로벌 스킬로 등록 (모든 작업 공간에서 사용 가능)
+패키징된 `skills/pptx-to-markdown` 폴더를 글로벌 커스터마이징 스킬 디렉토리로 통째로 복사하기만 하면 한 번에 설치됩니다.
 
-### 방법 B: 프로젝트 전용 스킬로 등록 (현재 워크스페이스만)
-워크스페이스 루트 경로에 `.agents/skills/pptx-to-markdown/` 디렉토리를 만들고 스크립트와 `SKILL.md`를 똑같이 생성합니다. AI 에이전트가 초기화될 때 스킬로 자동 인식 및 활성화됩니다.
+*   **macOS / Linux**:
+    ```bash
+    cp -r skills/pptx-to-markdown ~/.gemini/config/skills/
+    ```
+*   **Windows (PowerShell)**:
+    ```powershell
+    Copy-Item -Recurse -Path "skills/pptx-to-markdown" -Destination "$HOME\.gemini\config\skills\" -Force
+    ```
+
+### 방법 B: 프로젝트 전용 스킬로 등록 (현재 워크스페이스만 적용)
+스킬을 특정 프로젝트 디렉토리에서만 동작하게 하려면:
+*   워크스페이스 루트 경로에 `.agents/skills/` 디렉토리를 생성합니다.
+*   `skills/pptx-to-markdown` 폴더를 해당 디렉토리 아래로 복사합니다. (에이전트가 실행될 때 스킬을 자동 탐지하여 활성화합니다.)
 
 ---
 

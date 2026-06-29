@@ -65,26 +65,24 @@ Tested with an academic presentation slide deck containing 13 slides rich in mat
 
 ## 🤖 How to Install as a Claude Skill
 
-You can deploy this repository as a **Claude Skill**, allowing AI coding agents to automatically invoke this converter.
+You can easily deploy this tool as a **Claude Skill**. This allows Claude Code (or any customized Claude Agent) to automatically detect and run the pipeline.
 
-### Option A: Global Installation (Available in all workspaces)
-1. Copy the `src/` scripts to your global configuration directory:
-   ```bash
-   mkdir -p ~/.gemini/config/skills/pptx-to-markdown/scripts
-   cp src/* ~/.gemini/config/skills/pptx-to-markdown/scripts/
-   ```
-2. Create a `SKILL.md` in `~/.gemini/config/skills/pptx-to-markdown/SKILL.md`:
-   ```markdown
-   ---
-   name: pptx-to-markdown
-   description: High-fidelity PPTX to Markdown conversion tool with Pro/Lite modes and auto evaluation.
-   ---
-   # PPTX to Markdown Converter
-   Run: python [skill_path]/scripts/run.py {pptx} {output} --mode [pro|lite]
-   ```
+### Option A: Global Installation (Available in all directories)
+Simply copy the pre-packaged `skills/pptx-to-markdown` folder into your global configuration customizations directory:
+
+*   **macOS / Linux**:
+    ```bash
+    cp -r skills/pptx-to-markdown ~/.gemini/config/skills/
+    ```
+*   **Windows (PowerShell)**:
+    ```powershell
+    Copy-Item -Recurse -Path "skills/pptx-to-markdown" -Destination "$HOME\.gemini\config\skills\" -Force
+    ```
 
 ### Option B: Local Installation (Workspace-only)
-Create a `.agents/skills/pptx-to-markdown/` directory inside your workspace root, copy the scripts, and place the `SKILL.md` file there. The AI agent will auto-detect the skill when initialized.
+If you want to use the skill only in your current workspace directory:
+*   Create a `.agents/skills/` directory inside your workspace root.
+*   Copy `skills/pptx-to-markdown` into that folder. (The agent will auto-detect the skill when initialized).
 
 ---
 
