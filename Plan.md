@@ -50,7 +50,7 @@ flowchart TD
 | 버전 | 상태 | 커밋 |
 |------|------|------|
 | v1 | ✅ 완료 (2026-06-29) | `3a0cd8d` |
-| v2 | 🔲 계획 중 | — |
+| v2 | 🔨 진행 중 (Phase 1 완료) | — |
 
 ---
 
@@ -166,20 +166,21 @@ flowchart TD
     C --> H
 ```
 
-### Phase 1 — 복합 이미지 감지 및 텍스트 추출
-- [ ] Claude Vision으로 이미지 유형 자동 판별 (단순 / 복합)
-- [ ] 복합 이미지 내 텍스트 전체 추출 → MD 본문 구조화
-- [ ] 텍스트와 사진 영역 분리 설명 생성
+### Phase 1 — 복합 이미지 감지 및 텍스트 추출 ✅
+- [x] Claude Vision으로 이미지 유형 자동 판별 (단순 / 복합) — rules.json 기준 정의
+- [x] 복합 이미지 내 텍스트 전체 추출 → MD 본문 구조화 — CLAUDE.md 절차 문서화
+- [x] 텍스트와 사진 영역 분리 설명 생성 — crop_spec.json 형식 정의
 
-### Phase 2 — 사진 자동 크롭 (Pillow)
-- [ ] Claude Vision이 사진 영역 좌표 추정 (x1, y1, x2, y2)
-- [ ] Pillow로 해당 영역 크롭 → `images/슬라이드_순번_crop.png` 저장
-- [ ] 크롭 정확도 검증 기준 수립 (오차 허용 범위)
+### Phase 2 — 사진 자동 크롭 (Pillow) ✅
+- [x] Claude Vision이 사진 영역 좌표 추정 (x1, y1, x2, y2) — region_pct 비율 방식
+- [x] Pillow로 해당 영역 크롭 → `images/슬라이드_순번_crop.png` 저장 — crop.py 구현
+- [x] prepare.py: width_px, height_px 추가로 좌표 변환 기반 확보
+- [ ] 크롭 정확도 검증 — 실제 PPTX 변환 후 검토 필요
 
-### Phase 3 — 규칙 학습 (Few-shot 개선)
-- [ ] 회사 PPTX 패턴 분석 → `rules.json` 구축
-- [ ] 복합 이미지 유형별 변환 예시 → `examples/` 폴더 구성
-- [ ] 반복 등장 레이아웃 자동 인식
+### Phase 3 — 규칙 학습 (Few-shot 개선) ✅
+- [x] 회사 PPTX 패턴 분석 → `rules.json` 구축 (v1.0 초안)
+- [x] 복합 이미지 유형별 변환 예시 → `examples/` 폴더 구성 (3가지 유형)
+- [ ] 반복 등장 레이아웃 자동 인식 — 추가 PPTX 샘플 필요
 
 ### Phase 4 — 품질 평가 체계
 - [ ] 슬라이드별 변환 체크리스트 자동 생성

@@ -1,0 +1,21 @@
+[
+  {
+    "slide": 5,
+    "elements": [
+      {
+        "type": "title",
+        "text": "Qualitative Results",
+        "position": { "top_pt": 28.8, "left_pt": 66.0 }
+      },
+      {
+        "type": "image",
+        "path": "images/05_01.png",
+        "position": { "top_pt": 100.0, "left_pt": 66.0 },
+        "width_px": 1200,
+        "height_px": 400,
+        "display_width_pt": 600.0,
+        "display_height_pt": 200.0
+      }
+    ]
+  }
+]

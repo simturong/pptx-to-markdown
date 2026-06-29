@@ -1,0 +1,17 @@
+[
+  {
+    "slide": 1,
+    "elements": [
+      {
+        "type": "title",
+        "text": "**A Hallucination-Aware Vision-Language Model for Fine-Grained Image and Object ****Captioning**- Research Project –",
+        "position": { "top_pt": 79.7, "left_pt": 120.0 }
+      },
+      {
+        "type": "text",
+        "text": "2025.06.04\nArlindo Luciano Tulumba Roberto \n20257901@gs.cwnu.ac.kr",
+        "position": { "top_pt": 320.2, "left_pt": 120.0 }
+      }
+    ]
+  }
+]

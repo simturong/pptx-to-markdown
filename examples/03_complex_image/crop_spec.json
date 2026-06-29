@@ -1,0 +1,8 @@
+[
+  {
+    "source": "images/05_01.png",
+    "output": "images/05_01_crop.png",
+    "region_pct": {"x1": 0.0, "y1": 0.0, "x2": 0.35, "y2": 1.0},
+    "extracted_text": "Prompt: How many cats are in the image?\nGroundtruth: (B) 1\nMobileVLM-V2: 3 ❌\nOurs: (B) 1 ✅"
+  }
+]

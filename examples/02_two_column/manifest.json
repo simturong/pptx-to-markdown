@@ -1,0 +1,31 @@
+[
+  {
+    "slide": 2,
+    "elements": [
+      {
+        "type": "title",
+        "text": "Research **Background**",
+        "position": { "top_pt": 28.8, "left_pt": 66.0 }
+      },
+      {
+        "type": "text",
+        "text": "Despite continuous efforts...\nVLMs that generate both global...",
+        "position": { "top_pt": 143.8, "left_pt": 66.0 }
+      },
+      {
+        "type": "image",
+        "path": "images/02_01.png",
+        "position": { "top_pt": 110.5, "left_pt": 401.3 },
+        "width_px": 800,
+        "height_px": 600,
+        "display_width_pt": 220.0,
+        "display_height_pt": 320.0
+      },
+      {
+        "type": "text",
+        "text": "**Source: Mahajan et al, NeurIPS 2025 (AGE-VLM)**",
+        "position": { "top_pt": 454.9, "left_pt": 438.1 }
+      }
+    ]
+  }
+]

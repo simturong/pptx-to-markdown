@@ -2,7 +2,7 @@
 PPTX 파싱 스크립트
 - shape 좌표(top, left) 기준 위→아래, 좌→우 순서로 요소 정렬
 - 텍스트 추출 (bold/italic 보존)
-- 이미지 추출 → output/images/
+- 이미지 추출 → output/images/ (v2: 픽셀 크기 포함)
 - output/manifest.json 생성 (전체 합본 1개)
 
 사용법:
@@ -47,6 +47,12 @@ except ImportError:
     print("실행: C:\\Users\\sando\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pip install python-pptx Pillow")
     sys.exit(1)
 
+try:
+    from PIL import Image as PILImage
+    _PILLOW_AVAILABLE = True
+except ImportError:
+    _PILLOW_AVAILABLE = False
+
 
 def emu_to_pt(emu):
     return round(emu / 12700, 1)
@@ -83,17 +89,26 @@ def is_title(shape):
 
 
 def extract_image(shape, slide_idx, img_idx, image_dir):
-    """이미지 shape에서 PNG 파일 저장. 파일명 반환."""
+    """이미지 shape에서 PNG 파일 저장. (파일명, 너비px, 높이px) 반환."""
     try:
         image = shape.image
         ext = image.ext  # png, jpg, gif, ...
         filename = f"{slide_idx:02d}_{img_idx:02d}.{ext}"
         path = image_dir / filename
         path.write_bytes(image.blob)
-        return filename
+
+        width_px, height_px = None, None
+        if _PILLOW_AVAILABLE:
+            try:
+                with PILImage.open(path) as img:
+                    width_px, height_px = img.size
+            except Exception:
+                pass
+
+        return filename, width_px, height_px
     except Exception as e:
         print(f"  [경고] 이미지 추출 실패: {e}", file=sys.stderr)
-        return None
+        return None, None, None
 
 
 def sort_key(shape):
@@ -132,13 +147,20 @@ def process_slide(slide, slide_idx, image_dir):
 
         # 이미지 shape
         elif shape.shape_type == MSO_SHAPE_TYPE.PICTURE:
-            filename = extract_image(shape, slide_idx, img_idx, image_dir)
+            filename, width_px, height_px = extract_image(shape, slide_idx, img_idx, image_dir)
             if filename:
-                elements.append({
+                img_entry = {
                     "type": "image",
                     "path": f"images/{filename}",
                     "position": pos,
-                })
+                }
+                if width_px is not None:
+                    img_entry["width_px"] = width_px
+                    img_entry["height_px"] = height_px
+                if shape.width and shape.height:
+                    img_entry["display_width_pt"] = emu_to_pt(shape.width)
+                    img_entry["display_height_pt"] = emu_to_pt(shape.height)
+                elements.append(img_entry)
                 img_idx += 1
 
         # 그룹 shape (재귀 처리 생략, 필요 시 확장)
