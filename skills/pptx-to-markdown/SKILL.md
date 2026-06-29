@@ -1,76 +1,76 @@
 ---
 name: pptx-to-markdown
-description: 스마트폰 H/W팀 PPTX 문서를 고품질 한국어 Markdown으로 변환 및 정합성 검증을 수행하는 스킬 (스피드/정밀 모드 지원)
+description: A skill to convert smartphone H/W team's PPTX documents into high-quality Korean Markdown and perform QA integrity verification (supports Speed/Precision modes).
 ---
 
 # PPTX to Markdown Skill
 
 This skill automates the process of converting PowerPoint presentations (PPTX) into high-fidelity Markdown files.
 
-## 🚀 Execution Guide (실행 가이드)
+## 🚀 Execution Guide
 
 The skill features a unified entrypoint script located at `scripts/run.py` within the skill directory.
 
-### Commands (실행 명령어)
-*   **Precision Mode (🎯 정밀 모드 - 기본값)**: Performs layout sorting, composite image splitting, and quality validation.
+### Commands
+*   **Precision Mode (🎯 Precision Mode - Default)**: Performs layout sorting, composite image splitting, and quality validation.
     ```bash
-    python {skill_dir}/scripts/run.py <pptx_file> [output_dir] --mode pro
+    pptx-to-markdown <pptx_file> [output_dir] --mode pro
     ```
-*   **Speed Mode (🚀 스피드 모드)**: Fast text and image extraction only.
+*   **Speed Mode (🚀 Speed Mode)**: Fast text and image extraction only.
     ```bash
-    python {skill_dir}/scripts/run.py <pptx_file> [output_dir] --mode lite
+    pptx-to-markdown <pptx_file> [output_dir] --mode lite
     ```
 
 ---
 
-## 🛠️ Instructions for Claude (클로드가 수행할 지침)
+## 🛠️ Instructions for Claude
 
 When you receive a request to convert a PPTX file using this skill, follow these steps:
 
-### 0단계: 사용자 의도 및 모드 확인 (Confirm Input & Select Mode)
-이 스킬이 발동(호출)되면, **변환 파이프라인을 구동하기 전에 반드시 사용자에게 확인을 요청**해야 합니다.
-1.  **인풋 파일명 확인**: 사용자가 요청한 인풋 PPTX 파일명(예: `sample.pptx`)이 정확히 맞는지 사용자에게 물어 확인하십시오.
-2.  **변환 모드 선택 유도**: 사용자에게 '🚀 스피드 모드 (Speed Mode)'와 '🎯 정밀 모드 (Precision Mode)' 중 어떤 방식으로 변환을 수행할지 물어보십시오. 각 모드의 가치(속도 지향 vs 크롭 분할 및 자동 QA 품질 보증)를 간단히 설명해 주어야 합니다.
-3.  사용자가 인풋 파일과 모드 선택을 최종 승인하면, 그에 상응하는 인자(`--mode lite` 또는 `--mode pro`)를 전달해 1단계를 시작하십시오.
+### Step 0: Confirm Input & Select Mode
+Once this skill is triggered, **you must request confirmation from the user before executing the pipeline**.
+1.  **Verify Input Filename**: Ask the user if the input PPTX filename (e.g., `sample.pptx`) is correct.
+2.  **Guide Mode Selection**: Ask the user to choose between '🚀 Speed Mode (Speed Mode)' and '🎯 Precision Mode (Precision Mode)'. Briefly explain the benefits of each mode (speed-focused vs. composite cropping and automated QA validation).
+3.  Once the user approves the input file and mode, proceed to Step 1 with the corresponding argument (`--mode lite` or `--mode pro`).
 
-### 1단계: 파이프라인 구동 (Run Pipeline)
-사용자가 선택한 모드(스피드/정밀)에 따라 파이썬 스크립트를 구동하십시오.
-*   **정밀 모드 구동 시**: `run.py`를 통해 파싱(`prepare.py`), 크롭(`crop.py`), 품질 평가(`evaluate.py`)가 연속으로 연동됩니다.
+### Step 1: Run Pipeline
+Execute the pipeline script based on the selected mode.
+*   **Precision Mode**: Running `pptx-to-markdown` triggers parsing (`prepare.py`), cropping (`crop.py`), and quality evaluation (`evaluate.py`) sequentially.
 
-### 2단계: 고품질 마크다운 문서 생성 (Generate Markdown)
-파싱된 `manifest.json` 정보 및 `output/images/` 리소스를 직접 읽고 다음 지침들을 적용하여 [result.md](file:///output/result.md)를 완성하십시오.
+### Step 2: Generate Markdown
+Read the parsed `manifest.json` and `output/images/` resources directly, and generate [result.md](file:///output/result.md) by applying the following guidelines:
 
-#### A. 언어 및 기술 용어 번역 규칙
-*   모든 슬라이드 본문은 **한국어**로 정제하여 번역하되, 아래의 고유 학술/기술 용어 표기 기준을 철저히 준수하십시오.
+#### A. Language & Terminology Translation Rules
+*   Refine and translate the slide content into **Korean**, adhering strictly to the glossary below for academic/technical terms:
 
-| 원문 | 표기 기준 (번역 + 영문 병기) |
+| Original | Target Translation (Korean Translation + English in Parentheses) |
 | :--- | :--- |
 | VLM | Vision-Language Model (VLM) |
 | Hallucination | 환각(Hallucination) |
 | Fine-tuning | 파인튜닝(Fine-tuning) |
 | Benchmark | 벤치마크(Benchmark) |
 | Groundtruth | 정답(Groundtruth) |
-| NeurIPS / CVPR / ICCV / ECCV / AAAI | 번역 없이 원어 유지 |
+| NeurIPS / CVPR / ICCV / ECCV / AAAI | Keep original English name |
 
-#### B. 슬라이드 구조 및 레이아웃 처리 규칙
-*   요소 배치 순서는 shape의 `top` $\rightarrow$ `left` 좌표 기준(위$\rightarrow$아래, 좌$\rightarrow$우)으로 자연스러운 읽기 흐름을 복원합니다.
-*   **2단 레이아웃**: left 좌표 기준으로 구역이 나뉠 때(예: left < 360pt / left $\ge$ 360pt)는 HTML `<table>`을 사용하여 2컬럼 레이아웃으로 변환합니다.
+#### B. Slide Structure & Layout Handling Rules
+*   Order elements based on shape coordinates: `top` $\rightarrow$ `left` (top-to-bottom, left-to-right) to restore natural reading flow.
+*   **2-Column Layout**: When content is split horizontally (e.g., left < 360pt / left $\ge$ 360pt), use an HTML `<table>` to render a 2-column layout.
 
-#### C. 이미지 유형별 분기 처리 규칙
-*   **단순 사진 (`simple_photo`) / 다이어그램 (`simple_diagram`)**:
-    *   마크다운 이미지 경로 유지 및 이미지 하단에 `> 핵심 설명(3줄 이내)`를 배치합니다.
-*   **수식 이미지 (`formula_image`)**:
-    *   이미지 참조를 생략하고, 본문에 정확히 매칭된 LaTeX 디스플레이 수식(`$$...$$`) 또는 인라인 수식(`$...$`) 기호로 수식을 텍스트화하십시오.
-*   **표 이미지 (`table_image`)**:
-    *   이미지 참조를 생략하고, 마크다운 표 문법(`|` 컬럼 분할 및 `--|--` 구분선)을 엄격히 사용하여 정렬된 텍스트 표로 변환하십시오.
-*   **복합 이미지 (`complex_photo_text` — 사진과 텍스트의 병렬 결합)**:
-    1.  텍스트 영역의 글자를 모두 추출해 마크다운 본문에 표/리스트 구조로 포함하십시오.
-    2.  사진 영역의 좌표를 0.0~1.0 비율로 추정하여 `output/crop_spec.json`에 기록하십시오.
-    3.  `crop.py`를 통해 생성된 잘라낸 이미지 경로(`images/*_crop.png`)를 마크다운에 참조시키십시오.
+#### C. Image Classification and Handling Rules
+*   **Simple Photo (`simple_photo`) / Simple Diagram (`simple_diagram`)**:
+    *   Keep the Markdown image path reference and add `> Concise summary (under 3 lines)` below the image.
+*   **Mathematical Equation (`formula_image`)**:
+    *   Do not include the image path reference. Replace it by translating the equation into LaTeX format (`$$...$$` or `$ ... $`) in the body text.
+*   **Table Image (`table_image`)**:
+    *   Do not include the image path reference. Replace it by converting the table into a clean Markdown table (`|` column dividers and `--|--` header divider).
+*   **Photo+Text Composite (`complex_photo_text`)**:
+    1.  Extract all text from the text area and include it as a table/list in the Markdown body.
+    2.  Estimate coordinates for the photo area as ratios (0.0 to 1.0) and record them in `output/crop_spec.json`.
+    3.  Reference the cropped image output path (`images/*_crop.png`) generated by `crop.py` in the Markdown.
 
-#### D. 금지 사항
-*   이미지 분석 내용을 alt text 안에만 작성하지 마십시오. 반드시 마크다운 본문에 반영되어야 합니다.
-*   `complex_photo_text` 판별이 불분명할 경우, 임의로 변환하지 말고 사용자에게 먼저 확인하십시오.
+#### D. Prohibited Actions
+*   Do not write image analysis results only in alt text — always reflect them in the body text.
+*   If classification for `complex_photo_text` is ambiguous, ask the user first.
 
-### 3단계: 품질 보증 검증 (QA & Evaluation)
-변환 완료 후 `evaluate.py` 자동 품질 평가 도구를 실행하여, 누락된 슬라이드가 없으며 수식 및 표 구조가 정합성을 유지하는지 확인하고, 최종 품질 점수 90점 이상을 달성하도록 유도하십시오.
+### Step 3: QA & Evaluation
+After the conversion is complete, run the automated quality evaluation tool (`evaluate.py`) to verify that no slides are missing and all equations/tables are structurally correct. Aim for a quality score of 90/100 or above.

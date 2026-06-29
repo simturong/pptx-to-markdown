@@ -1,13 +1,13 @@
 """
-PPTX 파싱 스크립트
-- shape 좌표(top, left) 기준 위→아래, 좌→우 순서로 요소 정렬
-- 텍스트 추출 (bold/italic 보존)
-- 이미지 추출 → output/images/ (v2: 픽셀 크기 포함)
-- output/manifest.json 생성 (전체 합본 1개)
+PPTX Parsing Script
+- Sort elements based on shape coordinates (top, left) in top-to-bottom, left-to-right order.
+- Extract text (preserving bold/italic markdown formatting).
+- Extract images → output/images/ (includes pixel size in v2).
+- Generate output/manifest.json (single unified file).
 
-사용법:
-  python prepare.py --check              # 의존성 확인
-  python prepare.py <파일.pptx> [출력폴더]
+Usage:
+  python prepare.py --check              # Check dependencies
+  python prepare.py <file.pptx> [output_dir]
 """
 
 import json
@@ -16,7 +16,7 @@ from pathlib import Path
 
 
 def check_dependencies():
-    """필수 라이브러리 설치 여부 확인."""
+    """Verify if required packages are installed."""
     required = {"python-pptx": "pptx", "Pillow": "PIL"}
     missing = []
     for pkg, module in required.items():
@@ -24,18 +24,18 @@ def check_dependencies():
             __import__(module)
             print(f"  [OK] {pkg}")
         except ImportError:
-            print(f"  [없음] {pkg}")
+            print(f"  [Missing] {pkg}")
             missing.append(pkg)
     if missing:
-        print(f"\n설치 명령어:")
+        print(f"\nInstall command:")
         print(f'  C:\\Users\\sando\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pip install {" ".join(missing)}')
         sys.exit(1)
     else:
-        print("\n모든 의존성 확인 완료.")
+        print("\nAll dependencies are verified.")
 
 
 if len(sys.argv) == 2 and sys.argv[1] == "--check":
-    print("의존성 확인 중...")
+    print("Checking dependencies...")
     check_dependencies()
     sys.exit(0)
 
@@ -43,8 +43,8 @@ try:
     from pptx import Presentation
     from pptx.enum.shapes import MSO_SHAPE_TYPE
 except ImportError:
-    print("[오류] python-pptx 가 설치되어 있지 않습니다.")
-    print("실행: C:\\Users\\sando\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pip install python-pptx Pillow")
+    print("[Error] python-pptx is not installed.")
+    print("Run: C:\\Users\\sando\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pip install python-pptx Pillow")
     sys.exit(1)
 
 try:
@@ -59,7 +59,7 @@ def emu_to_pt(emu):
 
 
 def extract_text(shape):
-    """텍스트 shape에서 내용 추출. bold/italic 마크다운 변환."""
+    """Extract text from text shape and apply bold/italic markdown formatting."""
     lines = []
     for para in shape.text_frame.paragraphs:
         parts = []
@@ -89,7 +89,7 @@ def is_title(shape):
 
 
 def extract_image(shape, slide_idx, img_idx, image_dir):
-    """이미지 shape에서 PNG 파일 저장. (파일명, 너비px, 높이px) 반환."""
+    """Save image shape to PNG file. Returns (filename, width_px, height_px)."""
     try:
         image = shape.image
         ext = image.ext  # png, jpg, gif, ...
@@ -107,21 +107,21 @@ def extract_image(shape, slide_idx, img_idx, image_dir):
 
         return filename, width_px, height_px
     except Exception as e:
-        print(f"  [경고] 이미지 추출 실패: {e}", file=sys.stderr)
+        print(f"  [Warning] Failed to extract image: {e}", file=sys.stderr)
         return None, None, None
 
 
 def sort_key(shape):
-    """위→아래, 좌→우 정렬 키."""
+    """Sorting key for top-to-bottom, left-to-right order."""
     top = shape.top if shape.top is not None else 0
     left = shape.left if shape.left is not None else 0
-    # 슬라이드 높이 기준 행 구분 (±5% 오차 허용)
-    row_bucket = round(top / 457200)  # 457200 EMU ≈ 0.5인치 단위로 버킷
+    # Group shapes into row buckets of 0.5 inches (457200 EMU) to tolerate minor alignment issues
+    row_bucket = round(top / 457200)
     return (row_bucket, left)
 
 
 def process_slide(slide, slide_idx, image_dir):
-    """슬라이드 하나를 파싱해서 elements 리스트 반환."""
+    """Parse a single slide and return its elements list."""
     elements = []
     img_idx = 1
 
@@ -133,7 +133,7 @@ def process_slide(slide, slide_idx, image_dir):
             "left_pt": emu_to_pt(shape.left or 0),
         }
 
-        # 텍스트 shape
+        # Text shape
         if shape.has_text_frame:
             text = extract_text(shape)
             if not text.strip():
@@ -145,7 +145,7 @@ def process_slide(slide, slide_idx, image_dir):
                 "position": pos,
             })
 
-        # 이미지 shape
+        # Image shape
         elif shape.shape_type == MSO_SHAPE_TYPE.PICTURE:
             filename, width_px, height_px = extract_image(shape, slide_idx, img_idx, image_dir)
             if filename:
@@ -163,11 +163,11 @@ def process_slide(slide, slide_idx, image_dir):
                 elements.append(img_entry)
                 img_idx += 1
 
-        # 그룹 shape (재귀 처리 생략, 필요 시 확장)
+        # Group shape
         elif shape.shape_type == MSO_SHAPE_TYPE.GROUP:
             elements.append({
                 "type": "note",
-                "text": "[그룹 shape — 수동 확인 필요]",
+                "text": "[Group shape — manual verification required]",
                 "position": pos,
             })
 
@@ -183,12 +183,12 @@ def prepare(pptx_path: str, output_dir: str = "output"):
 
     prs = Presentation(pptx_path)
     total = len(prs.slides)
-    print(f"총 슬라이드 수: {total}")
+    print(f"Total slides: {total}")
 
     all_slides = []
 
     for idx, slide in enumerate(prs.slides, start=1):
-        print(f"  슬라이드 {idx}/{total} 처리 중...")
+        print(f"  Processing slide {idx}/{total}...")
         elements = process_slide(slide, idx, image_dir)
 
         slide_data = {
@@ -197,21 +197,21 @@ def prepare(pptx_path: str, output_dir: str = "output"):
         }
         all_slides.append(slide_data)
 
-    # 전체 manifest
+    # Save manifest
     full_manifest = output_dir / "manifest.json"
     full_manifest.write_text(
         json.dumps(all_slides, ensure_ascii=False, indent=2),
         encoding="utf-8"
     )
 
-    print(f"\n완료!")
-    print(f"  이미지   → {image_dir}")
-    print(f"  manifest → {full_manifest}")
+    print(f"\nCompleted!")
+    print(f"  Images   → {image_dir}")
+    print(f"  Manifest → {full_manifest}")
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("사용법: python prepare.py <파일.pptx> [출력폴더]")
+        print("Usage: python prepare.py <file.pptx> [output_dir]")
         sys.exit(1)
 
     pptx_file = sys.argv[1]

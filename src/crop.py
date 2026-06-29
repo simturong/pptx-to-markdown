@@ -1,23 +1,23 @@
 """
-이미지 크롭 스크립트 — v2
-Claude Vision이 분석한 사진 영역 좌표로 이미지를 크롭합니다.
+Image Cropping Script — v2
+Crops images based on coordinates analyzed by Claude Vision.
 
-사용법:
-  python crop.py output/crop_spec.json [출력폴더]
+Usage:
+  python crop.py output/crop_spec.json [output_dir]
 
-crop_spec.json 형식 (Claude가 변환 분석 시 생성):
+crop_spec.json Format (Generated during Claude conversion):
 [
   {
     "source": "images/02_01.png",
     "output": "images/02_01_crop.png",
     "region_pct": {"x1": 0.0, "y1": 0.0, "x2": 0.35, "y2": 1.0},
-    "extracted_text": "텍스트 영역에서 추출된 내용 (참고용)"
+    "extracted_text": "Extracted content from text area (for reference)"
   }
 ]
 
-region_pct: 이미지 전체 크기 대비 0.0~1.0 비율
-  x1, y1: 크롭 시작 좌표 (좌상단)
-  x2, y2: 크롭 끝 좌표 (우하단)
+region_pct: ratio of 0.0 to 1.0 relative to total image size
+  x1, y1: crop start coordinates (top-left)
+  x2, y2: crop end coordinates (bottom-right)
 """
 
 import json
@@ -32,18 +32,18 @@ def crop_images(spec_path: str, output_dir: str = "output"):
     try:
         from PIL import Image
     except ImportError:
-        print("[오류] Pillow가 설치되어 있지 않습니다.")
-        print("실행: C:\\Users\\sando\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pip install Pillow")
+        print("[Error] Pillow is not installed.")
+        print("Run: C:\\Users\\sando\\AppData\\Local\\Programs\\Python\\Python313\\python.exe -m pip install Pillow")
         sys.exit(1)
 
     if not spec_path.exists():
-        print(f"[오류] 파일 없음: {spec_path}")
+        print(f"[Error] File not found: {spec_path}")
         sys.exit(1)
 
     try:
         specs = json.loads(spec_path.read_text(encoding="utf-8"))
     except Exception as e:
-        print(f"[오류] crop_spec.json 읽기 실패: {e}")
+        print(f"[Error] Failed to read crop_spec.json: {e}")
         sys.exit(1)
 
     if isinstance(specs, dict):
@@ -56,7 +56,7 @@ def crop_images(spec_path: str, output_dir: str = "output"):
         region = spec["region_pct"]
 
         if not source.exists():
-            print(f"  [경고] 파일 없음: {source}")
+            print(f"  [Warning] File not found: {source}")
             continue
 
         try:
@@ -71,7 +71,7 @@ def crop_images(spec_path: str, output_dir: str = "output"):
                 y1, y2 = max(0, y1), min(h, y2)
 
                 if x2 <= x1 or y2 <= y1:
-                    print(f"  [경고] 크롭 영역 불유효 (너비/높이=0): {spec['source']}")
+                    print(f"  [Warning] Invalid crop region (width/height=0): {spec['source']}")
                     continue
 
                 cropped = img.crop((x1, y1, x2, y2))
@@ -81,22 +81,22 @@ def crop_images(spec_path: str, output_dir: str = "output"):
                 ok += 1
 
         except Exception as e:
-            print(f"  [오류] {spec['source']}: {e}")
+            print(f"  [Error] {spec['source']}: {e}")
 
-    print(f"\n크롭 완료: {ok}/{len(specs)} 건")
+    print(f"\nCropping completed: {ok}/{len(specs)} cases")
 
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("사용법: python crop.py <crop_spec.json> [출력폴더]")
+        print("Usage: python crop.py <crop_spec.json> [output_dir]")
         print()
-        print("crop_spec.json 예시:")
+        print("crop_spec.json example:")
         example = [
             {
                 "source": "images/02_01.png",
                 "output": "images/02_01_crop.png",
                 "region_pct": {"x1": 0.0, "y1": 0.0, "x2": 0.35, "y2": 1.0},
-                "extracted_text": "텍스트 영역 내용 (참고용)"
+                "extracted_text": "Text area content (for reference)"
             }
         ]
         print(json.dumps(example, ensure_ascii=False, indent=2))
