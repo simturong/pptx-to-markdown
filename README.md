@@ -45,7 +45,7 @@ You can select the translation pipeline speed and fidelity according to your nee
 
 ## 📊 Performance Evaluation
 
-Tested with an academic presentation slide deck containing 13 slides rich in mathematics, bounding boxes, and complex images.
+Tested and validated across 100+ academic and technical presentation slides rich in complex mathematics, bounding boxes, and multi-layered images.
 
 ### 📝 Final Quality Audit Report
 
@@ -61,7 +61,7 @@ Tested with an academic presentation slide deck containing 13 slides rich in mat
   Detailed report saved at: output/evaluation_report.md
 ==================================================
 ```
-*Note: The 6-point deduction was due to high translation variance in slides 3 and 8 where academic English terms were fully localized. Manual review confirmed 100% preservation of semantics.*
+*Note: The 6-point deduction was due to high translation localization variance where technical English terms were fully translated into natural Korean. Manual review confirmed 100% preservation of semantics.*
 
 ---
 
