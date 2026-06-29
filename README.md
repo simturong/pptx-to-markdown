@@ -65,24 +65,33 @@ Tested with an academic presentation slide deck containing 13 slides rich in mat
 
 ## 🤖 How to Install as a Claude Skill
 
-You can easily deploy this tool as a **Claude Skill**. This allows Claude Code (or any customized Claude Agent) to automatically detect and run the pipeline.
+You can easily deploy this tool as a **Claude Skill**. This allows Claude Code (official) or Gemini Agent customizations to automatically discover and run the pipeline.
 
 ### Option A: Global Installation (Available in all directories)
-Simply copy the pre-packaged `skills/pptx-to-markdown` folder into your global configuration customizations directory:
+Simply copy the pre-packaged `skills/pptx-to-markdown` folder into your global customs directory:
 
-*   **macOS / Linux**:
-    ```bash
-    cp -r skills/pptx-to-markdown ~/.gemini/config/skills/
-    ```
-*   **Windows (PowerShell)**:
-    ```powershell
-    Copy-Item -Recurse -Path "skills/pptx-to-markdown" -Destination "$HOME\.gemini\config\skills\" -Force
-    ```
+*   **For official Claude Code users (`~/.claude/skills/`)**:
+    *   **macOS / Linux**:
+        ```bash
+        cp -r skills/pptx-to-markdown ~/.claude/skills/
+        ```
+    *   **Windows (PowerShell)**:
+        ```powershell
+        Copy-Item -Recurse -Path "skills/pptx-to-markdown" -Destination "$HOME\.claude\skills\" -Force
+        ```
+*   **For Gemini / Antigravity Agent users (`~/.gemini/config/skills/`)**:
+    *   **macOS / Linux**:
+        ```bash
+        cp -r skills/pptx-to-markdown ~/.gemini/config/skills/
+        ```
+    *   **Windows (PowerShell)**:
+        ```powershell
+        Copy-Item -Recurse -Path "skills/pptx-to-markdown" -Destination "$HOME\.gemini\config\skills\" -Force
+        ```
 
 ### Option B: Local Installation (Workspace-only)
-If you want to use the skill only in your current workspace directory:
-*   Create a `.agents/skills/` directory inside your workspace root.
-*   Copy `skills/pptx-to-markdown` into that folder. (The agent will auto-detect the skill when initialized).
+*   **For Claude Code**: Copy the folder into `.claude/skills/` in your workspace root.
+*   **For Gemini / Antigravity**: Copy the folder into `.agents/skills/` in your workspace root. (The agent will auto-detect the skill when initialized).
 
 ---
 

@@ -71,19 +71,28 @@
 ### 방법 A: 글로벌 스킬로 등록 (모든 작업 공간에서 사용 가능)
 패키징된 `skills/pptx-to-markdown` 폴더를 글로벌 커스터마이징 스킬 디렉토리로 통째로 복사하기만 하면 한 번에 설치됩니다.
 
-*   **macOS / Linux**:
-    ```bash
-    cp -r skills/pptx-to-markdown ~/.gemini/config/skills/
-    ```
-*   **Windows (PowerShell)**:
-    ```powershell
-    Copy-Item -Recurse -Path "skills/pptx-to-markdown" -Destination "$HOME\.gemini\config\skills\" -Force
-    ```
+*   **공식 Claude Code 사용자 경로 (`~/.claude/skills/`)**:
+    *   **macOS / Linux**:
+        ```bash
+        cp -r skills/pptx-to-markdown ~/.claude/skills/
+        ```
+    *   **Windows (PowerShell)**:
+        ```powershell
+        Copy-Item -Recurse -Path "skills/pptx-to-markdown" -Destination "$HOME\.claude\skills\" -Force
+        ```
+*   **Gemini / Antigravity 에이전트 사용자 경로 (`~/.gemini/config/skills/`)**:
+    *   **macOS / Linux**:
+        ```bash
+        cp -r skills/pptx-to-markdown ~/.gemini/config/skills/
+        ```
+    *   **Windows (PowerShell)**:
+        ```powershell
+        Copy-Item -Recurse -Path "skills/pptx-to-markdown" -Destination "$HOME\.gemini\config\skills\" -Force
+        ```
 
 ### 방법 B: 프로젝트 전용 스킬로 등록 (현재 워크스페이스만 적용)
-스킬을 특정 프로젝트 디렉토리에서만 동작하게 하려면:
-*   워크스페이스 루트 경로에 `.agents/skills/` 디렉토리를 생성합니다.
-*   `skills/pptx-to-markdown` 폴더를 해당 디렉토리 아래로 복사합니다. (에이전트가 실행될 때 스킬을 자동 탐지하여 활성화합니다.)
+*   **Claude Code**: 워크스페이스 루트 경로에 `.claude/skills/` 폴더를 만들고 복사합니다.
+*   **Gemini / Antigravity**: 워크스페이스 루트 경로에 `.agents/skills/` 폴더를 만들고 복사합니다. (에이전트가 자동 탐지하여 활성화합니다.)
 
 ---
 
