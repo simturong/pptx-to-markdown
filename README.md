@@ -2,6 +2,8 @@
 
 > A high-fidelity PowerPoint (PPTX) to Markdown converter designed for technical presentations. Featuring automated layout alignment, LaTeX formula/table conversion, complex image cropping, and automated QA evaluation.
 
+**[한국어 버전 (Korean Version)](./README.ko.md)**
+
 [![GitHub License](https://img.shields.io/github/license/simturong/pptx-to-markdown?style=flat-square)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.13+-blue.svg?style=flat-square)](https://www.python.org/)
 [![Quality Score](https://img.shields.io/badge/Quality%20Score-94%2F100-success.svg?style=flat-square)](#performance-evaluation)

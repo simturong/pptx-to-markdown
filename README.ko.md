@@ -2,6 +2,8 @@
 
 > 기술 프레젠테이션용 슬라이드를 위해 설계된 고성능 파워포인트(PPTX) $\rightarrow$ 마크다운(Markdown) 자동 변환기입니다. 배치 레이아웃 자동 정렬, LaTeX 수식 및 표 변환, 복합 이미지 내 사진 자동 크롭, 그리고 변환 정합성을 체크하는 품질 자동 검증(QA) 평가기 기능을 내장하고 있습니다.
 
+**[English Version](./README.md)**
+
 [![GitHub License](https://img.shields.io/github/license/simturong/pptx-to-markdown?style=flat-square)](LICENSE)
 [![Python Version](https://img.shields.io/badge/python-3.13+-blue.svg?style=flat-square)](https://www.python.org/)
 [![Quality Score](https://img.shields.io/badge/Quality%20Score-94%2F100-success.svg?style=flat-square)](#-성능-검증-보고서)
