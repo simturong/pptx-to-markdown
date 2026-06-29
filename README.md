@@ -29,11 +29,11 @@
 
 ---
 
-## ⚡ Lite vs. Pro Mode Comparison
+## ⚡ Speed vs. Precision Mode Comparison
 
 You can select the translation pipeline speed and fidelity according to your needs:
 
-| Feature / Metric | 🚀 Lite Mode (Express) | 🎯 Pro Mode (Depth - Default) |
+| Feature / Metric | 🚀 Speed Mode (Express) | 🎯 Precision Mode (Depth - Default) |
 | :--- | :---: | :---: |
 | **Fidelity & Information Loss** | High Loss (Composite image text is ignored) | **Zero Loss** (Crops images & extracts all text) |
 | **LaTeX & Table Conversion** | Unsupported (Keeps raw image reference) | **Fully Supported** (Converts to code) |
@@ -107,10 +107,10 @@ python -m pip install python-pptx Pillow
 
 ### Run the Pipeline
 ```bash
-# Run in Pro Mode (Recommended)
+# Run in Precision Mode (Recommended)
 python src/run.py input/sample.pptx output --mode pro
 
-# Run in Lite Mode (Faster, text-only extraction)
+# Run in Speed Mode (Faster, text-only extraction)
 python src/run.py input/sample.pptx output --mode lite
 ```
 

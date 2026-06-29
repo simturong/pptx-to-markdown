@@ -41,7 +41,7 @@ def main():
         "--mode",
         choices=["lite", "pro"],
         default="pro",
-        help="실행 모드: lite (신속 모드, V1) / pro (정밀 모드, V2 - 기본값)"
+        help="실행 모드: lite (스피드 모드, V1) / pro (정밀 모드, V2 - 기본값)"
     )
 
     args = parser.parse_args()
@@ -57,7 +57,7 @@ def main():
     print(f"  PPTX to MD 변환 파이프라인 시작")
     print(f"  - 파일: {pptx_path.name}")
     print(f"  - 경로: {pptx_path}")
-    print(f"  - 모드: {'🚀 신속 모드 (Lite)' if args.mode == 'lite' else '🎯 정밀 모드 (Pro)'}")
+    print(f"  - 모드: {'🚀 스피드 모드 (Speed Mode)' if args.mode == 'lite' else '🎯 정밀 모드 (Precision Mode)'}")
     print(f"  - 출력: {output_dir.absolute()}")
     print("==================================================\n")
 
@@ -70,7 +70,7 @@ def main():
 
     if args.mode == "lite":
         print("\n==================================================")
-        print("🚀 신속 모드(Lite) 파싱 단계 완료!")
+        print("🚀 스피드 모드(Speed Mode) 파싱 단계 완료!")
         print("  - output/manifest.json 및 output/images/ 추출 완료.")
         print("  - 이제 이 리소스를 Claude에 입력하여 최종 한국어 MD를 생성하세요.")
         print("==================================================")
@@ -103,7 +103,7 @@ def main():
         print("    (Claude를 통해 result.md를 생성한 후 정밀 모드를 실행하면 자동 품질 보증 리포트가 작동합니다.)")
 
     print("\n==================================================")
-    print("🎯 정밀 모드(Pro) 파이프라인 처리 완료!")
+    print("🎯 정밀 모드(Precision Mode) 파이프라인 처리 완료!")
     print("==================================================")
 
 

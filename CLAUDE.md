@@ -193,14 +193,14 @@ C:\Users\sando\AppData\Local\Programs\Python\Python313\python.exe src/prepare.py
 ### 파이프라인 실행 모드
 사용자는 목적에 맞게 두 가지 변환 모드를 선택하여 변환기를 실행할 수 있습니다.
 
-1. **🚀 신속 모드 (Lite Mode)**: 파싱 및 단순 리소스 추출 위주의 빠른 속도 지향 모드
-2. **🎯 정밀 모드 (Pro Mode)**: 복합 이미지 크롭, 마크다운 표 구조화 및 자동 품질 평가를 거치는 정밀 지향 모드 (기본값)
+1. **🚀 스피드 모드 (Speed Mode)**: 파싱 및 단순 리소스 추출 위주의 빠른 속도 지향 모드
+2. **🎯 정밀 모드 (Precision Mode)**: 복합 이미지 크롭, 마크다운 표 구조화 및 자동 품질 평가를 거치는 정밀 지향 모드 (기본값)
 
 ```bash
-# 1. 신속 모드 (Lite) 실행
+# 1. 스피드 모드 (Speed) 실행
 C:\Users\sando\AppData\Local\Programs\Python\Python313\python.exe src/run.py input/파일.pptx output --mode lite
 
-# 2. 정밀 모드 (Pro) 실행 (기본값)
+# 2. 정밀 모드 (Precision) 실행 (기본값)
 C:\Users\sando\AppData\Local\Programs\Python\Python313\python.exe src/run.py input/파일.pptx output --mode pro
 ```
 

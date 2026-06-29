@@ -1,6 +1,6 @@
 ---
 name: pptx-to-markdown
-description: 스마트폰 H/W팀 PPTX 문서를 고품질 한국어 Markdown으로 변환 및 정합성 검증을 수행하는 스킬 (Lite/Pro 모드 지원)
+description: 스마트폰 H/W팀 PPTX 문서를 고품질 한국어 Markdown으로 변환 및 정합성 검증을 수행하는 스킬 (스피드/정밀 모드 지원)
 ---
 
 # PPTX to Markdown Skill
@@ -12,11 +12,11 @@ This skill automates the process of converting PowerPoint presentations (PPTX) i
 The skill features a unified entrypoint script located at `scripts/run.py` within the skill directory.
 
 ### Commands (실행 명령어)
-*   **Pro Mode (🎯 정밀 모드 - 기본값)**: Performs layout sorting, composite image splitting, and quality validation.
+*   **Precision Mode (🎯 정밀 모드 - 기본값)**: Performs layout sorting, composite image splitting, and quality validation.
     ```bash
     python {skill_dir}/scripts/run.py <pptx_file> [output_dir] --mode pro
     ```
-*   **Lite Mode (🚀 신속 모드)**: Fast text and image extraction only.
+*   **Speed Mode (🚀 스피드 모드)**: Fast text and image extraction only.
     ```bash
     python {skill_dir}/scripts/run.py <pptx_file> [output_dir] --mode lite
     ```
@@ -27,9 +27,15 @@ The skill features a unified entrypoint script located at `scripts/run.py` withi
 
 When you receive a request to convert a PPTX file using this skill, follow these steps:
 
+### 0단계: 사용자 의도 및 모드 확인 (Confirm Input & Select Mode)
+이 스킬이 발동(호출)되면, **변환 파이프라인을 구동하기 전에 반드시 사용자에게 확인을 요청**해야 합니다.
+1.  **인풋 파일명 확인**: 사용자가 요청한 인풋 PPTX 파일명(예: `sample.pptx`)이 정확히 맞는지 사용자에게 물어 확인하십시오.
+2.  **변환 모드 선택 유도**: 사용자에게 '🚀 스피드 모드 (Speed Mode)'와 '🎯 정밀 모드 (Precision Mode)' 중 어떤 방식으로 변환을 수행할지 물어보십시오. 각 모드의 가치(속도 지향 vs 크롭 분할 및 자동 QA 품질 보증)를 간단히 설명해 주어야 합니다.
+3.  사용자가 인풋 파일과 모드 선택을 최종 승인하면, 그에 상응하는 인자(`--mode lite` 또는 `--mode pro`)를 전달해 1단계를 시작하십시오.
+
 ### 1단계: 파이프라인 구동 (Run Pipeline)
-먼저 사용자의 모드 선택(Lite/Pro)에 따라 파이썬 스크립트를 구동하십시오.
-*   **Pro 모드 구동 시**: `run.py`를 통해 파싱(`prepare.py`), 크롭(`crop.py`), 품질 평가(`evaluate.py`)가 연속으로 연동됩니다.
+사용자가 선택한 모드(스피드/정밀)에 따라 파이썬 스크립트를 구동하십시오.
+*   **정밀 모드 구동 시**: `run.py`를 통해 파싱(`prepare.py`), 크롭(`crop.py`), 품질 평가(`evaluate.py`)가 연속으로 연동됩니다.
 
 ### 2단계: 고품질 마크다운 문서 생성 (Generate Markdown)
 파싱된 `manifest.json` 정보 및 `output/images/` 리소스를 직접 읽고 다음 지침들을 적용하여 [result.md](file:///output/result.md)를 완성하십시오.
